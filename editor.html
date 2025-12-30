@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple Range Editor</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; }
+    .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .btn {
+      padding: 8px 10px; border: 1px solid #ccc; background: #fff; border-radius: 8px;
+      cursor: pointer; user-select: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .sep { width: 1px; height: 26px; background: #ddd; margin: 0 4px; }
+    #editor {
+      border: 1px solid #ccc; border-radius: 12px; padding: 14px; min-height: 180px;
+      outline: none; line-height: 1.5;
+    }
+    textarea {
+      width: 100%; min-height: 160px; border-radius: 12px; border: 1px solid #ccc;
+      padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      resize: vertical;
+      margin-top: 14px;
+    }
+    .hint { color: #666; font-size: 13px; margin-top: 6px; }
+    kbd { border: 1px solid #ccc; border-bottom-width: 2px; padding: 1px 6px; border-radius: 6px; background:#fafafa; }
+  </style>
+</head>
+
+<body>
+  <h2>심플 웹 에디터 (Selection/Range)</h2>
+
+  <div class="toolbar">
+    <button class="btn" type="button" id="btnBold"><b>B</b></button>
+    <button class="btn" type="button" id="btnItalic"><i>I</i></button>
+    <button class="btn" type="button" id="btnUnderline"><u>U</u></button>
+
+    <div class="sep"></div>
+
+    <label class="btn" style="display:flex; gap:8px; align-items:center;">
+      글자색
+      <input id="colorPicker" type="color" value="#222222" style="width: 28px; height: 22px; border: none; padding: 0; background: transparent;">
+    </label>
+
+    <div class="sep"></div>
+
+    <button class="btn" id="btnClear" type="button">지우기</button>
+    <button class="btn" id="btnSave" type="button">저장(HTML 보기)</button>
+  </div>
+
+  <div id="editor" contenteditable="true">
+    여기에 글을 입력하고, 텍스트를 드래그로 선택한 뒤 스타일을 적용해 보세요.
+  </div>
+
+  <div class="hint">
+    Tip: 텍스트를 먼저 선택하고 버튼을 누르세요. (예: <kbd>Shift</kbd>+드래그)
+  </div>
+
+  <textarea id="htmlOutput" placeholder="저장 버튼을 누르면 여기에 HTML이 표시됩니다." readonly></textarea>
+
+  <script>
+    const editor = document.getElementById("editor");
+    const output = document.getElementById("htmlOutput");
+
+    const btnBold = document.getElementById("btnBold");
+    const btnItalic = document.getElementById("btnItalic");
+    const btnUnderline = document.getElementById("btnUnderline");
+    const colorPicker = document.getElementById("colorPicker");
+
+    const btnClear = document.getElementById("btnClear");
+    const btnSave = document.getElementById("btnSave");
+
+    // ----- Selection 저장/복원 (툴바 클릭 시 selection이 사라지는 문제 대응) -----
+    let savedRange = null;
+
+    function saveSelection() {
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+      savedRange = sel.getRangeAt(0).cloneRange();
+    }
+
+    function restoreSelection() {
+      if (!savedRange) return false;
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(savedRange);
+      return true;
+    }
+
+    // editor 내부에서 selection이 바뀔 때 저장
+    editor.addEventListener("mouseup", saveSelection);
+    editor.addEventListener("keyup", saveSelection);
+    editor.addEventListener("touchend", saveSelection);
+
+    // ----- Range 유틸 -----
+    function getActiveRangeInEditor() {
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return null;
+      const range = sel.getRangeAt(0);
+
+      // editor 밖 선택이면 무시
+      const common = range.commonAncestorContainer;
+      if (!editor.contains(common.nodeType === Node.TEXT_NODE ? common.parentNode : common)) {
+        return null;
+      }
+      return range;
+    }
+
+    function isRangeCollapsed(range) {
+      return !range || range.collapsed;
+    }
+
+    function wrapRangeWithElement(range, element) {
+      // range가 텍스트 조각을 부분 선택했을 때도 동작하도록
+      // surroundContents는 "부분적으로 선택된 요소"가 있으면 에러가 날 수 있어
+      // extractContents -> wrapper에 append -> insertNode 방식 사용
+      const frag = range.extractContents();
+      element.appendChild(frag);
+      range.insertNode(element);
+
+      // 커서를 래핑된 요소 뒤로 이동
+      const newRange = document.createRange();
+      newRange.setStartAfter(element);
+      newRange.collapse(true);
+
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(newRange);
+
+      // 저장 selection 갱신
+      saveSelection();
+    }
+
+    function applyInlineTag(tagName, styleObj = null) {
+      editor.focus();
+      // 툴바 클릭으로 selection이 날아갔을 수 있으니 복원
+      restoreSelection();
+
+      const range = getActiveRangeInEditor();
+      if (!range || isRangeCollapsed(range)) return;
+
+      const el = document.createElement(tagName);
+      if (styleObj) {
+        for (const [k, v] of Object.entries(styleObj)) el.style[k] = v;
+      }
+
+      wrapRangeWithElement(range, el);
+    }
+
+    // ----- 버튼들 -----
+    // 버튼 클릭 시 포커스 이동 방지(선택 유지에 도움)
+    [btnBold, btnItalic, btnUnderline].forEach(btn => {
+      btn.addEventListener("mousedown", (e) => e.preventDefault());
+    });
+    colorPicker.addEventListener("mousedown", (e) => e.preventDefault());
+
+    btnBold.addEventListener("click", () => applyInlineTag("strong"));
+    btnItalic.addEventListener("click", () => applyInlineTag("em"));
+    btnUnderline.addEventListener("click", () => applyInlineTag("u"));
+
+    colorPicker.addEventListener("input", (e) => {
+      const color = e.target.value;
+      applyInlineTag("span", { color });
+    });
+
+    btnClear.addEventListener("click", () => {
+      editor.innerHTML = "";
+      output.value = "";
+      savedRange = null;
+      editor.focus();
+    });
+
+    btnSave.addEventListener("click", () => {
+      output.value = editor.innerHTML.trim();
+    });
+
+    // (선택) 붙여넣기 시 스타일 제거하고 텍스트만 유지하려면 주석 해제
+    // editor.addEventListener("paste", (e) => {
+    //   e.preventDefault();
+    //   const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+    //   // 현재 커서 위치에 텍스트 삽입 (Range 기반)
+    //   restoreSelection();
+    //   const range = getActiveRangeInEditor();
+    //   if (!range) return;
+    //   range.deleteContents();
+    //   range.insertNode(document.createTextNode(text));
+    //   // 커서를 삽입된 텍스트 뒤로
+    //   range.collapse(false);
+    //   const sel = window.getSelection();
+    //   sel.removeAllRanges();
+    //   sel.addRange(range);
+    //   saveSelection();
+    // });
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음악 앨범</title>
+</head>
+<body>
+    <h1>음악 앨범</h1>
+    <style>
+        .album-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .album-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        @media (min-width: 600px) {
+            .album-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+                padding: 30px;
+            }
+        }
+    </style>
+
+    <div class="album-container">
+        <div class="album-item">
+            <picture>
+                <source media="(min-width: 601px)" srcset="./media/jeju-large.jpg">
+                <source media="(max-width: 600px)" srcset="./media/jeju-small.jpg">
+                <img src="./media/jeju.jpg" alt="제주 1">
+            </picture>
+        </div>
+    </div>
+</body>
+</html>
