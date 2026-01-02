@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플렉스 박스 예제</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            height: 100vh;
+            padding: 20px 20px;
+            border: solid 1px;
+            box-sizing: border-box;
+        }
+
+        .box {
+            margin: 10px;
+            width: 100px;
+            height: 100px;
+            background-color: #4facfe;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .box:hover {
+            background-color: #00f2fe;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 50px;
+        }
+
+        .grid-box {
+            width: 100%;
+            padding-top: 100%; /* 정사각형 비율 유지 */
+            background-color: #ff9a9e;
+            border-radius: 8px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <h1>플렉스 박스 예제</h1>
+    <div class="container">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div>
+
+    <h1> Grid 예제</h1>
+    <div class="grid-container">
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+    </div>
+</body>
+</html>

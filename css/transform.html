@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSS Transform 데모</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 24px;
+      line-height: 1.4;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    button {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #f5f5f5;
+    }
+
+    .stage {
+      width: 360px;
+      height: 240px;
+      border: 2px dashed #bbb;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      /* 3D 효과(translateZ)를 보기 위한 원근감 */
+      perspective: 600px;
+      background: #fafafa;
+    }
+
+    .box {
+      width: 120px;
+      height: 120px;
+      border-radius: 16px;
+      background: #4f46e5;
+      color: white;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+
+      /* 핵심: transform 변화가 부드럽게 보이도록 */
+      transition: transform 300ms ease;
+      transform: none;
+      user-select: none;
+    }
+
+    .hint {
+      margin-top: 12px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    code {
+      background: #f1f1f1;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h2>CSS transform 효과 버튼 데모</h2>
+
+  <div class="controls">
+    <button type="button" data-action="translate">이동 (translate)</button>
+    <button type="button" data-action="scale">확대/축소 (scale)</button>
+    <button type="button" data-action="rotate">회전 (rotate)</button>
+    <button type="button" data-action="skew">기울이기 (skew)</button>
+    <button type="button" data-action="translateZ">3D 이동 (translateZ)</button>
+    <button type="button" data-action="reset">Reset</button>
+  </div>
+
+  <div class="stage">
+    <div id="box" class="box">BOX</div>
+  </div>
+
+  <p class="hint">
+    버튼 클릭 시 <code>transform</code> 값이 바뀌고, <code>transition</code> 때문에 부드럽게 적용됩니다.
+  </p>
+
+  <script>
+    const box = document.getElementById("box");
+
+    // 각 버튼이 적용할 transform 값
+    const transforms = {
+      translate: "translate(80px, 25px)",
+      scale: "scale(1.5)",
+      rotate: "rotate(45deg)",
+      skew: "skew(18deg, 0deg)",
+      translateZ: "translateZ(80px)",
+      reset: "none",
+    };
+
+    // 이벤트 위임: controls 영역에서 버튼 클릭을 한 번에 처리
+    document.querySelector(".controls").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+
+      const action = btn.dataset.action;
+      box.style.transform = transforms[action] ?? "none";
+    });
+  </script>
+</body>
+</html>

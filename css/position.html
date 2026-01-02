@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSS position 예제</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+    /* 안내 헤더: fixed 확인용 */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      padding: 14px 16px;
+      background: #0be929;
+      color: #111;
+      z-index: 999;
+    }
+
+    /* fixed 헤더 때문에 본문이 가려지지 않게 */
+    .page {
+      padding-top: 72px;
+      padding-bottom: 120px;
+    }
+
+    /* 섹션 공통 */
+    .section {
+      margin: 16px;
+      padding: 16px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    .section-title {
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    /* 비교용 박스 */
+    .box {
+      padding: 12px;
+      border-radius: 10px;
+      color: #111;
+      border: 2px solid #222;
+      background: #ffe9a6;
+      width: 220px;
+    }
+
+    /* 스크롤을 만들기 위한 더미 영역 */
+    .spacer {
+      height: 900px;
+      border-radius: 10px;
+      margin-top: 12px;
+      background: repeating-linear-gradient(
+        0deg,
+        #e9e9e9,
+        #e9e9e9 18px,
+        #f7f7f7 18px,
+        #f7f7f7 36px
+      );
+    }
+
+    /* 1) static: 기본값. top/left가 먹지 않음 */
+    .pos-static {
+      position: static;
+      top: 300px; left: 300px; /* 무시됨 */
+      background: #ffd3d3;
+    }
+
+    /* 2) relative: 자기 원래 자리 기준으로 살짝 이동 (공간은 원래 자리 유지) */
+    .pos-relative {
+      position: relative;
+      top: 120px; left: 120px;
+      background: #d6f1ff;
+    }
+
+    /* absolute 데모를 위해 기준 컨테이너를 relative로 둠 */
+    .relative-container {
+      position: relative; /* absolute의 기준점 */
+      height: 180px;
+      padding: 12px;
+      border: 2px dashed #666;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    /* 3) absolute: 가장 가까운 "position이 static이 아닌" 조상 기준으로 배치 */
+    .pos-absolute {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #d9ffd9;
+    }
+
+    /* 4) sticky: 스크롤 시 특정 지점에 달라붙음(부모 영역 안에서만) */
+    .sticky-wrap {
+      height: 240px;
+      overflow: auto; /* 이 영역 안에서 스크롤이 생기면 sticky가 더 잘 보임 */
+      border: 2px solid #bbb;
+      border-radius: 10px;
+      background: #fff;
+    }
+    .pos-sticky {
+      position: sticky;
+      top: 0;            /* sticky가 달라붙는 기준 */
+      z-index: 10;
+      background: #fff3b8;
+      border-color: #aa7a00;
+    }
+    .sticky-content {
+      padding: 12px;
+    }
+
+    /* 5) fixed: 뷰포트(화면) 기준으로 고정 */
+    .fixed-badge {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 2px solid #222;
+      background: #c9d6ff;
+      z-index: 999;
+      font-weight: 700;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: #444;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">position 데모 (스크롤하면서 fixed / sticky 확인)</div>
+
+  <div class="page">
+    <!-- STATIC -->
+    <div class="section">
+      <div class="section-title">1) static (기본값: top/left 적용 안 됨)</div>
+      <div class="box pos-static">static 박스</div>
+      <div class="hint">static은 문서 흐름(normal flow) 그대로 배치되고, top/left/right/bottom은 무시됩니다.</div>
+    </div>
+
+    <!-- RELATIVE -->
+    <div class="section">
+      <div class="section-title">2) relative (원래 위치 기준으로 이동, 자리(공간)는 유지)</div>
+      <div class="box pos-relative">relative 박스</div>
+      <div class="hint">relative는 원래 자리에서 이동만 하고, 원래 자리 공간은 그대로 남습니다.</div>
+    </div>
+
+    <!-- ABSOLUTE -->
+    <div class="section">
+      <div class="section-title">3) absolute (가장 가까운 position 조상 기준으로 배치)</div>
+
+      <div class="relative-container">
+        <div class="hint">이 컨테이너는 <b>position: relative</b>라서 absolute의 기준점이 됩니다.</div>
+        <div class="box pos-absolute">absolute 박스</div>
+      </div>
+
+      <div class="hint">absolute는 문서 흐름에서 빠지고, 기준(조상)의 top/right/left/bottom 기준으로 배치됩니다.</div>
+    </div>
+
+    <!-- STICKY -->
+    <div class="section">
+      <div class="section-title">4) sticky (스크롤하다가 top에 달라붙음, 부모 영역 안에서만)</div>
+
+      <div class="sticky-wrap">
+        <div class="box pos-sticky">sticky 박스 (스크롤 시 상단에 붙음)</div>
+        <div class="sticky-content">
+          <div class="hint">아래 내용을 스크롤해보세요. sticky 박스가 top:0 위치에 달라붙습니다.</div>
+          <div class="spacer"></div>
+        </div>
+      </div>
+
+      <div class="hint">sticky는 평소엔 normal flow처럼 있다가, 스크롤로 임계점에 도달하면 고정처럼 동작합니다.</div>
+    </div>
+
+    <!-- 스크롤용 더미 -->
+    <div class="section">
+      <div class="section-title">스크롤 영역 (fixed 확인용)</div>
+      <div class="spacer"></div>
+    </div>
+  </div>
+
+  <div class="fixed-badge">fixed 배지</div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Transition & Transform</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .hover-box {
+            width: 300px;
+            height: 150px;
+            background-color: green;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.5s ease, transform 0.5s ease;
+            margin-bottom: 50px;
+        }
+
+        .hover-box:hover {
+            background-color: yellow;
+            color: black;
+            transform: scale(1.25);
+        }
+
+        .hover-box.rotated {
+            transform: rotate(45deg);
+        }
+
+        .hover-box.rotated:hover {
+            transform: rotate(45deg) scale(1.25);
+        }
+
+        .rotate-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .rotate-button:hover {
+            background-color: #0056b3;
+        }
+
+        .rotate-button:active {
+            background-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="hover-box" id="hoverBox">
+        hover me
+    </div>
+    
+    <button class="rotate-button" id="rotateBtn">45도 회전</button>
+
+    <script>
+        const hoverBox = document.getElementById('hoverBox');
+        const rotateBtn = document.getElementById('rotateBtn');
+
+        rotateBtn.addEventListener('click', function() {
+            hoverBox.classList.toggle('rotated');
+        });
+    </script>
+</body>
+</html>
