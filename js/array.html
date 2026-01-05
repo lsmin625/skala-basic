@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배열</title>
+</head>
+<body>
+    <script>
+        // 배열 생성
+        const originals = ["사과", "바나나", "오렌지"];
+
+        const copiedArray = [...originals]
+
+        console.log("원본 배열:", originals);
+        console.table("복사된 배열:", copiedArray.join(", "));
+        copiedArray.length = 0
+        console.table("리셋된 복사 배열:", copiedArray);
+
+
+        const array = [
+            [0, 1, 2, 3], 
+            [4, 5, 6, 7], 
+            [8, 9, 10, 11]
+        ];
+        console.table(array);
+
+    </script>
+</body>
+</html>
