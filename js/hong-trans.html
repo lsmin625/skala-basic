@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홍길동 변신술</title>
+</head>
+<body>
+    <h1>변신 대상 선택</h1>
+
+    <input id="radio-1" type="radio" name="transform" value="곰" checked>
+    <label for="radio-1">곰</label><br>
+
+    <input id="radio-2" type="radio" name="transform" value="호랑이">
+    <label for="radio-2">호랑이</label><br>
+
+    <input id="radio-3" type="radio" name="transform" value="스님">
+    <label for="radio-3">스님</label><br><br>
+
+    <button id="transform-btn">변신!</button>
+    <div id="result" style="margin-top:20px; font-weight:bold;"></div>
+
+    <script>
+        const transformBtn = document.getElementById("transform-btn");
+        const resultDiv = document.getElementById("result");
+
+        transformBtn.addEventListener("click", () => {
+            const radios = document.getElementsByName("transform");
+            console.log(radios);
+            let checkedRadio;
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    checkedRadio = radios[i];
+                    break;
+                }
+            }
+
+            console.log(checkedRadio);
+            const selectedOption = checkedRadio.value;
+            resultDiv.textContent = `홍길동이 ${selectedOption}(으)로 변신했습니다!`;
+        });
+    </script>
+</body>
+</html>

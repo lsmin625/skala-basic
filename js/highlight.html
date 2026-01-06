@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .highlight {
+            background-color: yellow;
+            color: red;
+            font-weight: bold;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="target">이 문장을 강조해 보세요.</p>
+    <button id="highlight-btn">강조하기</button>
+
+    <script>
+        const highlightBtn = document.getElementById("highlight-btn");
+        const targetP = document.getElementById("target");
+
+        highlightBtn.addEventListener("click", () => {
+            // 토글 방식으로 강조 클래스 추가/제거
+            targetP.classList.toggle("highlight");
+
+            // if (targetP.classList.contains("highlight")) {
+            //     targetP.classList.remove("highlight");
+            // } else {
+            //     targetP.classList.add("highlight");
+            // }  
+        });
+    </script>
+</body>
+
+</html>
