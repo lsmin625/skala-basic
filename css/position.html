@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>위치 속성 예제</title>
+    <style>
+        body {
+            height: 2000px;
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            height: 800px;
+            border: 2px solid #333;
+            margin: 20px 0;
+            padding: 10px;
+        }
+        
+        .static {
+            position: static;
+            background-color: #ffcccb;
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .relative {
+            position: relative;
+            top: 30px;
+            left: 50px;
+            background-color: #90ee90;
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .absolute {
+            position: absolute;
+            top: 100px;
+            right: 50px;
+            background-color: #87ceeb;
+            padding: 20px;
+        }
+        
+        .fixed {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ffd700;
+            padding: 20px;
+            z-index: 5;
+        }
+        
+        .sticky {
+            position: sticky;
+            top: 0;
+            background-color: #dda0dd;
+            padding: 20px;
+            margin: 10px;
+            z-index: 10;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>CSS Position 속성 예제</h1>
+
+    <div class="static">
+        <strong>Static (기본값)</strong><br>
+        일반적인 문서 흐름에 따라 배치됩니다. top, right, bottom, left 속성이 적용되지 않습니다.
+    </div>
+
+    <div class="sticky">
+        <strong>Sticky</strong><br>
+        스크롤 시 상단에 고정됩니다. (스크롤을 내려보세요!)
+    </div>
+
+    <div class="relative">
+        <strong>Relative</strong><br>
+        원래 위치를 기준으로 top: 30px, left: 50px 이동했습니다.
+    </div>
+
+    <div class="container">
+        <p>이 컨테이너는 absolute 요소의 기준이 됩니다 (position: relative)</p>
+        
+        <div class="absolute">
+            <strong>Absolute</strong><br>
+            부모 요소를 기준으로 top: 100px, right: 50px 위치에 배치됩니다.
+        </div>
+    </div>
+
+    <div class="fixed">
+        <strong>Fixed</strong><br>
+        화면 우측 하단에 고정
+    </div>
+
+    <p style="margin-top: 50px;">
+        스크롤을 내려서 Sticky와 Fixed 요소의 동작을 확인하세요!
+    </p>
+</body>
+</html>
