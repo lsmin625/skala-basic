@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 전체 레이아웃 (Grid) */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* 단일 컬럼 */
+            gap: 20px;
+            /* 위아래 간격 */
+            padding: 20px;
+            width: 1200px;
+        }
+
+
+        /* 검색 영역 (Flexbox) */
+        .search-section {
+            display: flex;
+            gap: 10px;
+            /* 입력창과 버튼 사이 간격 */
+        }
+
+        .search-input {
+            flex-grow: 1;
+            /* 입력창이 남은 공간을 모두 차지 */
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+        }
+
+        .search-btn {
+            padding: 8px 15px;
+            background-color: #fff;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+
+        /* 데이터 영역 (박스 스타일) */
+        .content-section {
+            border: 1px solid #ccc;
+            padding: 40px 20px;
+            min-height: 200px;
+        }
+
+        .title {
+            margin: 0 0 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .divider {
+            border: 0;
+            border-top: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="search-section">
+            <input type="text" placeholder="키워드 입력" class="search-input">
+            <button type="button" class="search-btn">검색</button>
+        </div>
+
+        <div class="content-section">
+            <h2 class="title">목록형 데이터 영역</h2>
+            <hr class="divider">
+        </div>
+    </div>
+</body>
+
+</html>
