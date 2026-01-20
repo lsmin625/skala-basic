@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반응형 Grid 레이아웃</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Grid 컨테이너 설정 */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
+            grid-template-areas:
+                "header"
+                "main"
+                "footer";
+            min-height: 100vh;
+            gap: 0;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            grid-area: header;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        header nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* 메인 영역 - 데스크톱에서는 2열 그리드 */
+        main {
+            grid-area: main;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "content"
+                "sidebar";
+            gap: 2rem;
+            padding: 2rem;
+            background-color: #f5f5f5;
+        }
+
+        /* 메인 콘텐츠 */
+        .content {
+            grid-area: content;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .content h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .content article {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content article:last-child {
+            border-bottom: none;
+        }
+
+        .content article h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .content article p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* 사이드바 */
+        aside {
+            grid-area: sidebar;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        aside h3 {
+            color: #764ba2;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        aside .widget {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        aside .widget:last-child {
+            border-bottom: none;
+        }
+
+        aside ul {
+            list-style: none;
+        }
+
+        aside li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+
+        aside li::before {
+            content: "▸ ";
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        /* 푸터 스타일 */
+        footer {
+            grid-area: footer;
+            background: #2c3e50;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* 태블릿 사이즈 (768px 이상) */
+        @media screen and (min-width: 768px) {
+            main {
+                grid-template-columns: 2fr 1fr;
+                grid-template-areas: "content sidebar";
+                padding: 3rem;
+            }
+
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .content h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* 데스크톱 사이즈 (1024px 이상) */
+        @media screen and (min-width: 1024px) {
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            }
+
+            main {
+                grid-template-columns: 3fr 1fr;
+                padding: 4rem;
+                gap: 3rem;
+            }
+
+            header {
+                padding: 3rem;
+            }
+
+            header h1 {
+                font-size: 3rem;
+            }
+        }
+
+        /* 작은 모바일 (480px 이하) */
+        @media screen and (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            header nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            main {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .content,
+            aside {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 영역 (고정) -->
+        <header>
+            <h1>📱 반응형 Grid 레이아웃</h1>
+            <p>화면 크기를 조절하여 레이아웃 변화를 확인하세요!</p>
+            <nav>
+                <ul>
+                    <li><a href="#home">홈</a></li>
+                    <li><a href="#about">소개</a></li>
+                    <li><a href="#services">서비스</a></li>
+                    <li><a href="#contact">연락처</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 메인 콘텐츠 영역 (반응형) -->
+        <main>
+            <section class="content">
+                <h2>메인 콘텐츠</h2>
+                
+                <article>
+                    <h3>🎯 CSS Grid 레이아웃</h3>
+                    <p>
+                        CSS Grid는 2차원 레이아웃 시스템으로, 행과 열을 동시에 제어할 수 있습니다.
+                        이 예제에서는 Grid를 사용하여 반응형 레이아웃을 구현했습니다.
+                        화면 크기에 따라 메인 콘텐츠와 사이드바의 배치가 자동으로 변경됩니다.
+                    </p>
+                </article>
+
+                <article>
+                    <h3>📱 반응형 디자인</h3>
+                    <p>
+                        <strong>모바일 (768px 이하):</strong> 메인 콘텐츠와 사이드바가 수직으로 배치됩니다.<br>
+                        <strong>태블릿 (768px~1023px):</strong> 메인 콘텐츠와 사이드바가 2:1 비율로 나란히 배치됩니다.<br>
+                        <strong>데스크톱 (1024px 이상):</strong> 메인 콘텐츠와 사이드바가 3:1 비율로 나란히 배치됩니다.
+                    </p>
+                </article>
+
+                <article>
+                    <h3>🏗️ 시맨틱 태그 사용</h3>
+                    <p>
+                        이 페이지는 HTML5 시맨틱 태그를 사용하여 구조화되었습니다:
+                    </p>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li><code>&lt;header&gt;</code> - 페이지 상단 헤더</li>
+                        <li><code>&lt;main&gt;</code> - 주요 콘텐츠 영역</li>
+                        <li><code>&lt;section&gt;</code> - 메인 콘텐츠 섹션</li>
+                        <li><code>&lt;article&gt;</code> - 독립적인 콘텐츠 블록</li>
+                        <li><code>&lt;aside&gt;</code> - 사이드바 영역</li>
+                        <li><code>&lt;footer&gt;</code> - 페이지 하단 푸터</li>
+                    </ul>
+                </article>
+
+                <article>
+                    <h3>✨ 주요 특징</h3>
+                    <p>
+                        • 헤더와 푸터는 모든 화면 크기에서 전체 너비로 유지됩니다.<br>
+                        • 메인 콘텐츠와 사이드바는 화면 크기에 따라 레이아웃이 변경됩니다.<br>
+                        • Grid의 grid-template-areas를 사용하여 직관적인 레이아웃 정의가 가능합니다.<br>
+                        • 미디어 쿼리를 통해 다양한 기기에 최적화된 경험을 제공합니다.
+                    </p>
+                </article>
+            </section>
+
+            <!-- 사이드바 영역 (반응형) -->
+            <aside>
+                <div class="widget">
+                    <h3>📋 카테고리</h3>
+                    <ul>
+                        <li>웹 디자인</li>
+                        <li>프론트엔드</li>
+                        <li>반응형 웹</li>
+                        <li>CSS Grid</li>
+                        <li>HTML5</li>
+                    </ul>
+                </div>
+
+                <div class="widget">
+                    <h3>🔥 인기 글</h3>
+                    <ul>
+                        <li>CSS Grid 완벽 가이드</li>
+                        <li>Flexbox vs Grid</li>
+                        <li>반응형 웹 디자인 팁</li>
+                        <li>시맨틱 HTML 마스터하기</li>
+                    </ul>
+                </div>
+
+                <div class="widget">
+                    <h3>🔗 유용한 링크</h3>
+                    <ul>
+                        <li>MDN Web Docs</li>
+                        <li>CSS-Tricks</li>
+                        <li>Can I Use</li>
+                        <li>W3C Standards</li>
+                    </ul>
+                </div>
+            </aside>
+        </main>
+
+        <!-- 푸터 영역 (고정) -->
+        <footer>
+            <p>&copy; 2026 반응형 Grid 레이아웃 예제</p>
+            <p>
+                <a href="#privacy">개인정보처리방침</a> | 
+                <a href="#terms">이용약관</a> | 
+                <a href="#contact">문의하기</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #95a5a6;">
+                화면 크기를 조절하여 반응형 레이아웃을 확인해보세요! 🎨
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
