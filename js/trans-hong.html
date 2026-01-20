@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국어 판단</title>
+</head>
+<body>
+    <script>
+        const transform = (message) => {
+            if (message.length > 0) {
+                document.write(`홍길동이 [${message}]로 변신하였습니다.`);
+            } else {
+                document.write(`연기처럼 사라졌습니다.`);
+            }
+        } 
+
+        const message = prompt("변신 대상을 입력하세요:");
+        transform(message);
+
+</script>
+</body>
+</html>
