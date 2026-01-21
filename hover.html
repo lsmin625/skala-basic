@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOVER 예제</title>
+
+    <style>
+        .button-normal {
+            background-color: #4CAF50; /* Green */
+            padding: 20px;
+            text-align: center;
+        }
+
+        .button-hover {
+            background-color: #11c9dd; /* Darker green */
+            color: white;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+    <h1>HOVER 예제</h1>
+    <button id="hoverBtn" class="button-normal">마우스를 올려보세요!</button>
+    
+    <script>
+        const button = document.getElementById('hoverBtn');
+        
+        // mouseover 이벤트: 마우스가 버튼 위에 올라갔을 때
+        button.addEventListener('mouseover', () => {
+            button.classList.add('button-hover');
+        });
+        
+        // mouseout 이벤트: 마우스가 버튼에서 벗어났을 때
+        button.addEventListener('mouseout', () => {
+            button.classList.remove('button-hover');});
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .highlight {
+            background-color: yellow;
+            color: red;
+            font-weight: bold;
+            padding: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Toggle Button</h1>
+    <button id="toggleBtn">Toggle</button>
+    <p id="toggleText">Hello, World!</p>
+
+    <script>
+        const toggleButton = document.getElementById('toggleBtn');
+        const toggleText = document.getElementById('toggleText');
+
+        toggleButton.addEventListener('click', () => {
+            if (toggleText.classList.contains('highlight')) {
+            toggleText.classList.remove('highlight');
+            } else {
+            toggleText.classList.add('highlight');
+            }
+        });
+    </script>
+</body>
+
+</html>

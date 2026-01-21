@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트 전파 제어</title>
+</head>
+<body>
+    <h1>이벤트 등록 방식</h1>
+    <div id="eventSection" style="width:300px; height:200px; border:1px solid black; margin:20px; padding: 10px; cursor: pointer;">
+        <button id="eventBtn">클릭해보세요!</button>
+        <p id="eventOutput">출력될 내용</p>
+    </div>
+
+    <script>
+        const eventButton = document.getElementById('eventBtn');
+        const eventOutput = document.getElementById('eventOutput');
+        const eventSection = document.getElementById('eventSection');
+
+        eventButton.addEventListener('click', () => {
+            eventOutput.textContent = '버튼(자식)이 클릭되었습니다!';
+            console.log('버튼 이벤트 발생');
+        });
+
+        // 캡처링 단계: 부모 -> 자식으로 내려가는 단계에서 실행
+        eventSection.addEventListener('click', (e) => {
+            console.log('캡처링 단계: 부모에서 감지');
+            console.log('클릭된 실제 요소:', e.target.id);
+            
+            // 부모 영역을 직접 클릭했을 때만 버튼 이벤트 트리거
+            if (e.target === eventSection) {
+                console.log('부모 영역 클릭 -> 버튼 이벤트 강제 실행');
+                eventButton.click(); // 버튼의 클릭 이벤트 강제 발생
+            }
+        }, true);
+        
+        // 버블링 단계: 자식 -> 부모로 올라가는 단계에서 실행
+        eventSection.addEventListener('click', (e) => {
+            console.log('버블링 단계: 부모에서 감지');
+            console.log('이벤트 발생 원천:', e.target.id);
+        });
+
+    </script>
+</body>
+</html>
