@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple ContentEditable Editor</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
+    .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+    .toolbar button {
+      padding: 8px 10px; border: 1px solid #ddd; background: #fff; border-radius: 8px;
+      cursor: pointer;
+    }
+    .toolbar button:hover { background: #f6f6f6; }
+    .toolbar button.active { border-color: #333; }
+    .toolbar .sep { width: 1px; height: 24px; background: #e5e5e5; margin: 0 4px; }
+    #editor {
+      border: 1px solid #ddd; border-radius: 12px; padding: 12px;
+      min-height: 180px; line-height: 1.6;
+    }
+    #editor:focus { outline: 2px solid #333; outline-offset: 2px; }
+    .output-wrap { margin-top: 16px; }
+    textarea {
+      width: 100%; min-height: 180px; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+    .hint { color: #666; font-size: 13px; margin: 6px 0 0; }
+  </style>
+</head>
+<body>
+  <h2>심플 웹 에디터 (contenteditable)</h2>
+
+  <div class="toolbar" role="toolbar" aria-label="Editor toolbar">
+    <button type="button" data-cmd="bold"><b>B</b></button>
+    <button type="button" data-cmd="italic"><i>I</i></button>
+    <button type="button" data-cmd="underline"><u>U</u></button>
+
+    <span class="sep" aria-hidden="true"></span>
+
+    <label>
+      글자색
+      <input id="colorPicker" type="color" value="#111111" />
+    </label>
+
+    <span class="sep" aria-hidden="true"></span>
+
+    <button type="button" id="btnSave">저장(HTML 보기)</button>
+    <button type="button" id="btnClear">초기화</button>
+  </div>
+
+  <div
+    id="editor"
+    contenteditable="true"
+    spellcheck="false"
+    aria-label="Editor"
+  >여기에 글을 입력하세요. 드래그로 선택 후 버튼을 눌러 서식을 적용합니다.</div>
+  <p class="hint">팁) 서식을 적용하려면 텍스트를 먼저 선택하세요.</p>
+
+  <div class="output-wrap">
+    <h3>저장된 HTML</h3>
+    <textarea id="output" readonly placeholder="저장 버튼을 누르면 여기에 HTML이 표시됩니다."></textarea>
+  </div>
+
+  <script>
+    const editor = document.getElementById("editor");
+    const output = document.getElementById("output");
+    const colorPicker = document.getElementById("colorPicker");
+    const btnSave = document.getElementById("btnSave");
+    const btnClear = document.getElementById("btnClear");
+    const toolbarButtons = document.querySelectorAll(".toolbar button[data-cmd]");
+
+    // 에디터에 포커스 유지 (버튼 누를 때 selection이 풀리는 문제 완화)
+    document.querySelector(".toolbar").addEventListener("mousedown", (e) => {
+      // 버튼/컬러피커 클릭 시 에디터 selection 유지 목적
+      e.preventDefault();
+    });
+
+    function exec(cmd, value = null) {
+      editor.focus();
+      document.execCommand(cmd, false, value);
+      refreshActiveStates();
+    }
+
+    // 굵게/기울임/밑줄
+    toolbarButtons.forEach(btn => {
+      btn.addEventListener("click", () => exec(btn.dataset.cmd));
+    });
+
+    // 글자색 (foreColor)
+    colorPicker.addEventListener("input", (e) => {
+      exec("foreColor", e.target.value);
+    });
+
+    // 저장: innerHTML 출력
+    btnSave.addEventListener("click", () => {
+      output.value = editor.innerHTML;
+    });
+
+    // 초기화
+    btnClear.addEventListener("click", () => {
+      editor.innerHTML = "";
+      output.value = "";
+      editor.focus();
+      refreshActiveStates();
+    });
+
+    // 커서 위치에 따라 활성 상태 표시
+    function refreshActiveStates() {
+      toolbarButtons.forEach(btn => {
+        const cmd = btn.dataset.cmd;
+        try {
+          btn.classList.toggle("active", document.queryCommandState(cmd));
+        } catch (_) {}
+      });
+    }
+
+    // selection 변화/입력 시 active 갱신
+    document.addEventListener("selectionchange", () => {
+      if (document.activeElement === editor) refreshActiveStates();
+    });
+    editor.addEventListener("keyup", refreshActiveStates);
+    editor.addEventListener("mouseup", refreshActiveStates);
+  </script>
+</body>
+</html>
